@@ -1,5 +1,17 @@
-from flask import Flask
+from flask import Flask, request, Response
+
+from kik import KikApi, Configuration
+from kik.messages import messages_from_json, TextMessage
+
+try:
+    from settings import *
+except ImportError:
+    from settings.example import *
+
 app = Flask(__name__)
+kik = KikApi(BOT_USERNAME, BOT_API_KEY)
+
+kik.set_configuration(Configuration(webhook=WEBHOOK))
 
 @app.route('/webhook', methods=['POST'])
 def incoming():
